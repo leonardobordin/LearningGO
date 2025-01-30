@@ -5,6 +5,7 @@ import (
 	"introducao-testes/enderecos"
 )
 
+
 func main() {
 	tipoEndereco := enderecos.TipoDeEndereco("avenida Vila dos Bobos")
 	fmt.Println(tipoEndereco)

@@ -3,7 +3,7 @@ package enderecos
 import "strings"
 
 func TipoDeEndereco(endereco string) string {
-	tiposDeEndereco := []string{"rua", "avenida", "rodavia", "bairro"}
+	tiposDeEndereco := []string{"rua", "avenida", "rodovia", "bairro"}
 
 	enderecoEmLetraMinuscula := strings.ToLower(endereco)
 
