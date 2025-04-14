@@ -11,12 +11,12 @@ type Retangulo struct {
 	Largura float64
 }
 
-type Circulo struct {
-	Raio float64
-}
-
 func (r Retangulo) Area() float64 {
 	return r.Altura * r.Largura
+}
+
+type Circulo struct {
+	Raio float64
 }
 
 func (c Circulo) Area() float64 {

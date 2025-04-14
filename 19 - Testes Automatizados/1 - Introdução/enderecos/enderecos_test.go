@@ -1,7 +1,7 @@
 package enderecos_test
 
 import (
-	. "introducao-testes/enderecos" // Passa . como alias para ele entender que o Enderecos é o padrão
+	. "introducao-testes/enderecos" // Passa . como alias para ele entender que o Enderecos é o padrão então não preciso fazer enderecos.TipoDeEndereco
 	"testing"
 )
 

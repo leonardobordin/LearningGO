@@ -7,7 +7,7 @@ import (
 )
 
 type pessoa struct {
-	Nome   string `json:"nome"`
+	Nome   string `json:"nome"` // Se colocar um "-" ao invés da tag "nome" ele ignora o campo na conversão
 	Genero string `json:"genero"`
 }
 
