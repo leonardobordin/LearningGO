@@ -6,15 +6,18 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 type usuario struct {
 	ID    uint32 `json:"id"`
 	Nome  string `json:"nome"`
-	Email string `json:"email`
+	Email string `json:"email"`
 }
 
-func CriarUsuarios(w http.ResponseWriter, r *http.Request) {
+func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 	corpoRequisicao, erro := ioutil.ReadAll(r.Body)
 	if erro != nil {
 		w.Write([]byte("Falha ao ler o corpo requisição"))
@@ -27,7 +30,7 @@ func CriarUsuarios(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db, erro := banco.Conexao()
+	db, erro := banco.Conectar()
 	if erro != nil {
 		w.Write([]byte("Falha ao se conectar com a base de dados"))
 		return
@@ -55,4 +58,72 @@ func CriarUsuarios(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(fmt.Sprintf("Usuario inserido com sucesso. Id: %d", idInserido)))
+}
+
+func BuscarUsuarios(w http.ResponseWriter, r *http.Request) {
+	db, erro := banco.Conectar()
+	if erro != nil {
+		w.Write([]byte("Falha ao se conectar com o banco de dados"))
+		return
+	}
+	defer db.Close()
+
+	linhas, erro := db.Query("SELECT * FROM usuarios")
+	if erro != nil {
+		w.Write([]byte("Falha ao buscar os usuarios"))
+		return
+	}
+	defer linhas.Close()
+
+	var usuarios []usuario
+	for linhas.Next() {
+		var usuario usuario
+
+		if erro := linhas.Scan(&usuario.ID, &usuario.Nome, &usuario.Email); erro != nil {
+			w.Write([]byte("Falha ao escanear usuario"))
+			return
+		}
+
+		usuarios = append(usuarios, usuario)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if erro := json.NewEncoder(w).Encode(usuarios); erro != nil {
+		w.Write([]byte("Falha ao converter para JSON"))
+	}
+}
+
+func BuscarUsuario(w http.ResponseWriter, r *http.Request) {
+	parametros := mux.Vars(r)
+
+	ID, erro := strconv.ParseUint(parametros["id"], 10, 32)
+	if erro != nil {
+		w.Write([]byte("Falha ao converter ID"))
+		return
+	}
+
+	db, erro := banco.Conectar()
+	if erro != nil {
+		w.Write([]byte("Falha ao se conectar com a base de dados"))
+		return
+	}
+	defer db.Close()
+
+	linha, erro := db.Query("SELECT * FROM usuarios WHERE id = ?", ID)
+	if erro != nil {
+		w.Write([]byte("Falha ao buscar ID selecionado"))
+		return
+	}
+	defer linha.Close()
+
+	var usuario usuario
+	if linha.Next() {
+		linha.Scan(&usuario.ID, &usuario.Nome, &usuario.Email)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if erro := json.NewEncoder(w).Encode(usuario); erro != nil {
+		w.Write([]byte("Falha ao converter para JSON"))
+		return
+	}
 }
