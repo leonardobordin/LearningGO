@@ -22,6 +22,8 @@ func main() {
 	rounter.HandleFunc("/usuarios", servidor.CriarUsuario).Methods(http.MethodPost)
 	rounter.HandleFunc("/usuarios", servidor.BuscarUsuarios).Methods(http.MethodGet)
 	rounter.HandleFunc("/usuarios/{id}", servidor.BuscarUsuario).Methods(http.MethodGet)
+	rounter.HandleFunc("/usuarios/{id}", servidor.AtualizarUsuario).Methods(http.MethodPut)
+	rounter.HandleFunc("/usuarios/{id}", servidor.DeletarUsuario).Methods(http.MethodDelete)
 
 	fmt.Println("Escutando na porta 5000")
 
