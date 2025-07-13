@@ -8,6 +8,9 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strings"
+
+	"golang.org/x/tools/go/analysis/passes/nilfunc"
 )
 
 func CriarUsuario(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +49,17 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 }
 
 func BuscarUsuarios(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Buscando todos os usuários!"))
+	nomeOuNick := strings.ToLower(r.URL.Query().Get("usuario"))
+
+	db, erro := database.Conectar()
+	if erro != nil {
+		response.Erro(w, http.StatusInternalServerError, erro)
+		return
+	}
+	defer db.Close()
+
+	repositorio := repositories.NovoRepositorioDeUsuarios(db)
+	usuarios, erro := repositorio.Buscar(nomeOuNick)
 }
 
 func BuscarUsuario(w http.ResponseWriter, r *http.Request) {
