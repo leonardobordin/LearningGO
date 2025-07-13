@@ -4,4 +4,4 @@ introducao-testes/enderecos/enderecos.go:13.39,14.40 1 1
 introducao-testes/enderecos/enderecos.go:14.40,16.4 1 1
 introducao-testes/enderecos/enderecos.go:19.2,19.27 1 1
 introducao-testes/enderecos/enderecos.go:19.27,21.3 1 1
-introducao-testes/enderecos/enderecos.go:23.2,23.25 1 0
+introducao-testes/enderecos/enderecos.go:23.2,23.25 1 1
