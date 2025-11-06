@@ -28,6 +28,6 @@ func alunoEstaAprovado(n1,n2 float32) bool {
 func main () {
 	fmt.Println("Panic e Recovery")
 
-	fmt.Println(alunoEstaAprovado(6,7))
+	fmt.Println(alunoEstaAprovado(6,6))
 	fmt.Println("Finalizou")
 }

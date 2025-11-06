@@ -9,8 +9,6 @@ import (
 	"io"
 	"net/http"
 	"strings"
-
-	"golang.org/x/tools/go/analysis/passes/nilfunc"
 )
 
 func CriarUsuario(w http.ResponseWriter, r *http.Request) {
@@ -60,6 +58,11 @@ func BuscarUsuarios(w http.ResponseWriter, r *http.Request) {
 
 	repositorio := repositories.NovoRepositorioDeUsuarios(db)
 	usuarios, erro := repositorio.Buscar(nomeOuNick)
+	if erro != nil {
+		response.Erro(w, http.StatusInternalServerError, erro)
+	}
+
+	response.JSON(w, http.StatusOK, usuarios)
 }
 
 func BuscarUsuario(w http.ResponseWriter, r *http.Request) {

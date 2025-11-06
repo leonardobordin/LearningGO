@@ -47,10 +47,14 @@ func (repositorio Usuarios) Buscar(nomeOuNick string) ([]models.Usuario, error) 
 	}
 	defer linhas.Close()
 
-	var usuarios []models.Usuarios
+	var usuarios []models.Usuario
 
 	for linhas.Next() {
-		var usuario models
+		var usuario models.Usuario
+		if erro := linhas.Scan(&usuario.ID, &usuario.Nome, &usuario.Nick, &usuario.Email, &usuario.CriadoEm); erro != nil{
+			return nil, erro
+		}
+		usuarios = append(usuarios, usuario)
 	}
-
+	return usuarios, nil
 }
